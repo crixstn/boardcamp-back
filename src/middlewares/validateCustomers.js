@@ -27,20 +27,19 @@ export async function validateCustomer(req, res, next){
 
 export async function validateUpdateCustomer(req, res, next){
     const { id } = req.params
-    const { cpf } = req.body;
 
-    if(!cpf){
+    if(!req.body){
         return res.status(201).send("body is required.")
     }
 
-    const validation = customersSchema.validate(upCustomer)
+    const validation = customersSchema.validate(req.body)
     if(validation.error){
         const err = validation.error.details.map((detail) => detail.message);
         return res.status(400).send(err)
     }
 
     try{
-        const cpf = await db.query(`SELECT * FROM customers WHERE cpf = $1`, [cpf]);
+        const cpf = await db.query(`SELECT * FROM customers WHERE cpf = $1`, [req.body.cpf]);
         if(cpf.rows[0]){
             if(cpf.rows[0].id != id){
               return res.sendStatus(409)
