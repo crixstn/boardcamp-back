@@ -13,8 +13,8 @@ export async function postGame(req, res){
     const {name, image, stockTotal, pricePerDay} = req.body
 
     try{
-        //let id = await db.query(`SELECT * FROM games`)
-        //id = id.rows.length + 1
+        let id = await db.query(`SELECT * FROM games`)
+        id = id.rows.length + 1
 
         await db.query(`INSERT INTO games VALUES ($1, $2, $3, $4)`, [name, image, stockTotal, pricePerDay]);
         res.sendStatus(201);
