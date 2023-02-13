@@ -17,7 +17,7 @@ export async function validateCustomer(req, res, next){
     try{
         const cpfExist = await db.query(`SELECT * FROM customers WHERE cpf = $1`, [newUser.cpf]);
         if(cpfExist.rows[0]){
-            return res.sendStatus(400)
+            return res.sendStatus(409)
         }
     }catch(err){
         return res.status(500).send(err.message);

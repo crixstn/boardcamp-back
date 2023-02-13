@@ -16,7 +16,7 @@ export async function postGame(req, res){
         let id = await db.query(`SELECT * FROM games`)
         id = id.rows.length + 1
 
-        await db.query(`INSERT INTO games VALUES ($1, $2, $3, $4)`, [name, image, stockTotal, pricePerDay]);
+        await db.query(`INSERT INTO games VALUES ($1, $2, $3, $4, $5)`, [id, name, image, stockTotal, pricePerDay]);
         res.sendStatus(201);
     }catch(err){
         return res.status(500).send(err.message);
