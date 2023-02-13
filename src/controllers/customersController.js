@@ -10,7 +10,7 @@ export async function getCustomers(req, res) {
 }
 
 export async function getCustomer(req, res){
-    const { id } = req.params;
+    const {id} = req.params;
 
     try{
         const user = await db.query(`SELECT * FROM customers WHERE id = $1`, [id]);
@@ -43,10 +43,7 @@ export async function putCustomer(req, res){
     const { id } = req.params
 
     try{
-        const update = await db.query(`UPDATE customers SET "name" = $1, "phone" = $2, "cpf" = $3, "birthday" = $4  WHERE "id" = $5`,[name,phone,cpf,birthday,id]);
-        if(update.rowCount == 0){
-            return res.sendStatus(404)
-        }
+        await db.query(`UPDATE customers SET "name" = $1, "phone" = $2, "cpf" = $3, "birthday" = $4  WHERE "id" = $5`,[name, phone, cpf, birthday, id]);
         
         res.sendStatus(201)
     }catch(err){

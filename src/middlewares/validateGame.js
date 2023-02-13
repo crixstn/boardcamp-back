@@ -10,7 +10,7 @@ export async function validateGame(req, res, next){
     const validation = gameSchema.validate(req.body)
     if(validation.error){
         const err = validation.error.details.map((detail) => detail.message);
-        return res.status(422).send(err)
+        return res.status(400).send(err)
     }
 
     try{

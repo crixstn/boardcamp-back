@@ -2,20 +2,19 @@ import { db } from "../database/database.js";
 import customersSchema from "../schemas/customerSchema.js";
 
 export async function validateCustomer(req, res, next){
-    const newUser = req.body;
 
-    if(!newUser){
+    if(!req.body){
         return res.status(201).send("body is required.")
     }
 
-    const validation = customersSchema.validate(newUser)
+    const validation = customersSchema.validate(req.body)
     if(validation.error){
         const err = validation.error.details.map((detail) => detail.message);
-        return res.status(422).send(err)
+        return res.status(400).send(err)
     }
 
     try{
-        const cpfExist = await db.query(`SELECT * FROM customers WHERE cpf = $1`, [newUser.cpf]);
+        const cpfExist = await db.query(`SELECT * FROM customers WHERE cpf = $1`, [req.body.cpf]);
         if(cpfExist.rows[0]){
             return res.sendStatus(409)
         }
@@ -37,13 +36,13 @@ export async function validateUpdateCustomer(req, res, next){
     const validation = customersSchema.validate(upCustomer)
     if(validation.error){
         const err = validation.error.details.map((detail) => detail.message);
-        return res.status(422).send(err)
+        return res.status(400).send(err)
     }
 
     try{
         const cpf = await db.query(`SELECT * FROM customers WHERE cpf = $1`, [cpf]);
-        if(checkCpf.rows[0]){
-            if(checkCpf.rows[0].id != id){
+        if(cpf.rows[0]){
+            if(cpf.rows[0].id != id){
               return res.sendStatus(409)
             }
         }
