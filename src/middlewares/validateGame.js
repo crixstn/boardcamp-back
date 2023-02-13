@@ -14,7 +14,7 @@ export async function validateGame(req, res, next){
     try{
         const game = await db.query(`SELECT * FROM games WHERE name = $1`, [req.body.name]);
         if(game.rows[0]){
-            return res.sendStatus(400)
+            return res.sendStatus(409)
         }
     }catch(err){
         res.sendStatus(500)
